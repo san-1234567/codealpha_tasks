@@ -1,0 +1,62 @@
+import java.util.*;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class ChatBot implements ActionListener {
+
+    private JFrame frame;
+    private JTextArea chatArea;
+    private JTextField inputField;
+    private JButton sendButton;
+    private Map<String, String> responses;
+
+    public ChatBot() {
+        responses = new HashMap<>();
+        responses.put("hello", "Hi! How can I assist you today?");
+        responses.put("hi", "Hello! What's on your mind?");
+        responses.put("how are you", "I'm doing well, thanks for asking!");
+        // Add more responses here...
+
+        frame = new JFrame("ChatBot");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(400, 400);
+
+        chatArea = new JTextArea(20, 30);
+        chatArea.setEditable(false);
+
+        inputField = new JTextField(30);
+
+        sendButton = new JButton("Send");
+        sendButton.addActionListener(this);
+
+        frame.add(new JScrollPane(chatArea), BorderLayout.CENTER);
+        frame.add(inputField, BorderLayout.PAGE_START);
+        frame.add(sendButton, BorderLayout.PAGE_END);
+
+        frame.setVisible(true);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String input = inputField.getText();
+        String response = getResponse(input);
+        chatArea.append("You: " + input + "\n");
+        chatArea.append("ChatBot: " + response + "\n");
+        inputField.setText("");
+    }
+
+    private String getResponse(String input) {
+        input = input.toLowerCase();
+        if (responses.containsKey(input)) {
+            return responses.get(input);
+        } else {
+            return "I didn't understand that. Can you please rephrase?";
+        }
+    }
+
+    public static void main(String[] args) {
+        new ChatBot();
+    }
+}
+
